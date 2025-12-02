@@ -1,7 +1,6 @@
-// src/layout/Navbar.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // To get cart state
+import { useDispatch, useSelector } from "react-redux";
 import {
   ShoppingCart,
   User,
@@ -17,6 +16,7 @@ import SearchSuggestions from "../components/ui/SearchSuggestions";
 import MobileMenu from "./MobileMenu";
 import { openCart } from "../features/cart/cartSlice";
 import { logout } from "../features/auth/authSlice";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 // Helper component for NavLink styling
 const StyledNavLink = ({ to, children }) => (
@@ -44,7 +44,7 @@ const Navbar = () => {
     (state) => state.cart || {}
   );
 
-  // --- NEW: SEARCH STATE & LOGIC ---
+  // ---  SEARCH STATE & LOGIC ---
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -62,7 +62,7 @@ const Navbar = () => {
   }, [searchTerm]);
 
   // 2. Fetch Data based on Debounced Term (Only if term > 2 chars)
-  // We reuse the getAllProductsQuery from Day 5, passing limit 5 for suggestions
+
   const shouldFetch = debouncedTerm.length > 2;
   const { data, isLoading } = useGetAllProductsQuery(
     { search: debouncedTerm, limit: 5 },
@@ -88,7 +88,7 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  // --- END NEW SEARCH LOGIC ---
+  // --- END  SEARCH LOGIC ---
 
   return (
     <>
@@ -109,8 +109,6 @@ const Navbar = () => {
 
           {/* 3. Icons & Search */}
           <div className="flex items-center space-x-4">
-            {/* Search (UI Only for now) */}
-
             <div className="relative hidden lg:block" ref={searchRef}>
               <form onSubmit={handleSearchSubmit}>
                 <input
@@ -211,6 +209,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            <ThemeToggle />
 
             {/* User Section */}
             {isAuthenticated ? (
@@ -239,7 +238,7 @@ const Navbar = () => {
                     </p>
                   </div>
 
-                  {/* --- NEW LINKS START --- */}
+                  {/* ---  LINKS START --- */}
                   <div className="p-1">
                     <Link
                       to="/profile"
@@ -255,7 +254,7 @@ const Navbar = () => {
                       <Package size={18} /> My Orders
                     </Link>
                   </div>
-                  {/* --- NEW LINKS END --- */}
+                  {/* --- LINKS END --- */}
 
                   <div className="border-t border-gray-100 p-1">
                     <button

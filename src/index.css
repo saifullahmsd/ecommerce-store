@@ -1,31 +1,38 @@
-/* 1. Import Font */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-/* 2. Import Tailwind */
 @import "tailwindcss";
 
-/* 3. THEME CUSTOMIZATION (Yeh hai v4 ka tareeqa) */
 @theme {
-  /* Apke Custom Colors */
   --color-primary: #2563eb;
   --color-primary-dark: #1e40af;
   --color-primary-light: #60a5fa;
   --color-accent: #f59e0b;
-  --color-background: #f8fafc;
-  --color-card: #ffffff;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-success: #10b981;
-  --color-error: #ef4444;
 
-  /* Apka Custom Font */
   --font-sans: "Inter", "sans-serif";
 }
 
-/* 4. Apply Base Styles */
+:root {
+  --color-bg-base: #f8fafc; /* Light Gray */
+  --color-bg-card: #ffffff; /* White */
+  --color-text-base: #0f172a; /* Dark Blue-Gray */
+  --color-text-muted: #64748b; /* Gray */
+  --color-border: #e2e8f0; /* Light Border */
+}
+
+.dark {
+  --color-bg-base: #0f172a; /* Very Dark Blue */
+  --color-bg-card: #1e293b; /* Dark Blue-Gray */
+  --color-text-base: #f8fafc; /* White/Light Gray */
+  --color-text-muted: #94a3b8; /* Lighter Gray */
+  --color-border: #334155; /* Dark Border */
+}
+
 @layer base {
   body {
-    /* Ab yeh 100% kaam karega! */
-    @apply bg-background text-text;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-base);
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
   }
 }

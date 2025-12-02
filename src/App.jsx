@@ -1,4 +1,5 @@
-import React, { Suspense, lazy } from "react"; // <--- Import lazy & Suspense
+import React, { Suspense, lazy, useEffect } from "react"; // <--- Import lazy & Suspense
+import { useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ScrollToTop from "./components/shared/ScrollToTop";
@@ -44,6 +45,17 @@ const PageLoader = () => (
 );
 
 function App() {
+  const { mode } = useSelector((state) => state.theme); // <--- Get Theme
+
+  // Update HTML class when theme changes
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (mode === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [mode]);
   return (
     <>
       <ScrollToTop />
