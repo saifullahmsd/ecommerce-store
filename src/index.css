@@ -1,0 +1,31 @@
+/* 1. Import Font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* 2. Import Tailwind */
+@import "tailwindcss";
+
+/* 3. THEME CUSTOMIZATION (Yeh hai v4 ka tareeqa) */
+@theme {
+  /* Apke Custom Colors */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1e40af;
+  --color-primary-light: #60a5fa;
+  --color-accent: #f59e0b;
+  --color-background: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+
+  /* Apka Custom Font */
+  --font-sans: "Inter", "sans-serif";
+}
+
+/* 4. Apply Base Styles */
+@layer base {
+  body {
+    /* Ab yeh 100% kaam karega! */
+    @apply bg-background text-text;
+  }
+}

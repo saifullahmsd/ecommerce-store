@@ -1,0 +1,266 @@
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
+import { useSearchParams } from "react-router-dom";
+import { useGetAllProductsQuery } from "../api/dummyProductsApi";
+import { Funnel, MagnifyingGlass, CircleNotch } from "phosphor-react";
+
+// Components
+import ProductCard from "../components/shared/ProductCard";
+import FilterSidebar from "../components/products/FilterSidebar";
+import SortDropdown from "../components/products/SortDropdown";
+import Skeleton from "../components/shared/Skeleton";
+// Removed: Pagination import
+
+const Products = () => {
+  // 1. URL Params Management
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // --- NEW: Infinite Scroll State ---
+  const [displayLimit, setDisplayLimit] = useState(12);
+  const observerTarget = useRef(null);
+
+  // 2. Initialize State from URL (Persistence)
+  const initialFilters = {
+    search: searchParams.get("search") || "",
+    category: searchParams.get("category") || "all",
+    minPrice: searchParams.get("minPrice") || "",
+    maxPrice: searchParams.get("maxPrice") || "",
+    minRating: searchParams.get("minRating") || 0,
+    sortBy: searchParams.get("sortBy") || "",
+    // Note: 'page' is removed from logic as we are scrolling now
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
+  const [debouncedSearch, setDebouncedSearch] = useState(filters.search);
+
+  // 3. Handle Search Debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(filters.search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [filters.search]);
+
+  // 4. Sync State to URL
+  useEffect(() => {
+    const params = {};
+    if (debouncedSearch) params.search = debouncedSearch;
+    if (filters.category && filters.category !== "all")
+      params.category = filters.category;
+    if (filters.minPrice) params.minPrice = filters.minPrice;
+    if (filters.maxPrice) params.maxPrice = filters.maxPrice;
+    if (filters.minRating > 0) params.minRating = filters.minRating;
+    if (filters.sortBy) params.sortBy = filters.sortBy;
+    // Removed: page sync
+    setSearchParams(params);
+  }, [filters, debouncedSearch, setSearchParams]);
+
+  // --- NEW: Reset Scroll when filters change ---
+  useEffect(() => {
+    setDisplayLimit(12);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [filters, debouncedSearch]);
+
+  // 5. Prepare API Query Params
+  const [sortKey, sortOrder] = filters.sortBy.split("-");
+
+  const queryParams = {
+    limit: 100, // Fetch large batch to allow client-side filtering
+    skip: 0,
+    search: debouncedSearch,
+    category: filters.category,
+    sortBy: sortKey,
+    order: sortOrder,
+  };
+
+  const { data, isLoading, isError } = useGetAllProductsQuery(queryParams);
+
+  // 6. CLIENT-SIDE FILTERING
+  const filteredProducts = useMemo(() => {
+    if (!data?.products) return [];
+
+    return data.products.filter((product) => {
+      const min = filters.minPrice ? parseFloat(filters.minPrice) : 0;
+      const max = filters.maxPrice ? parseFloat(filters.maxPrice) : Infinity;
+      const priceMatch = product.price >= min && product.price <= max;
+      const ratingMatch = product.rating >= parseFloat(filters.minRating);
+      return priceMatch && ratingMatch;
+    });
+  }, [data, filters.minPrice, filters.maxPrice, filters.minRating]);
+
+  // --- NEW: Slice based on displayLimit (Infinite Scroll) ---
+  const visibleProducts = filteredProducts.slice(0, displayLimit);
+  const hasMore = displayLimit < filteredProducts.length;
+  const totalItems = filteredProducts.length;
+
+  // --- NEW: Intersection Observer Logic ---
+  const handleObserver = useCallback(
+    (entries) => {
+      const [target] = entries;
+      if (target.isIntersecting && hasMore) {
+        // User reached bottom, load 12 more with a small delay for UX
+        setTimeout(() => {
+          setDisplayLimit((prev) => prev + 12);
+        }, 500);
+      }
+    },
+    [hasMore]
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0,
+    });
+    if (observerTarget.current) observer.observe(observerTarget.current);
+    return () => {
+      if (observerTarget.current) observer.unobserve(observerTarget.current);
+    };
+  }, [handleObserver]);
+
+  // 7. Handlers
+  const handleClearFilters = () => {
+    setFilters({
+      search: "",
+      category: "all",
+      minPrice: "",
+      maxPrice: "",
+      minRating: 0,
+      sortBy: "",
+    });
+    setDisplayLimit(12); // Reset scroll
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      {/* Page Header */}
+      <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <h1 className="text-3xl font-bold text-gray-800">
+          {filters.category === "all"
+            ? "All Products"
+            : `Category: ${filters.category}`}
+        </h1>
+
+        {/* Mobile Filter Toggle */}
+        <button
+          className="flex items-center gap-2 rounded-lg border px-4 py-2 font-medium md:hidden"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          <Funnel /> Filters
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-8 md:flex-row">
+        {/* LEFT: Sidebar */}
+        <div className="w-full md:w-64 flex-shrink-0">
+          <FilterSidebar
+            filters={filters}
+            setFilters={setFilters}
+            clearFilters={handleClearFilters}
+            isOpen={isSidebarOpen}
+            closeSidebar={() => setIsSidebarOpen(false)}
+          />
+        </div>
+
+        {/* RIGHT: Product Grid */}
+        <div className="flex-1">
+          {/* Controls: Search & Sort */}
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+            <div className="relative w-full sm:max-w-xs">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={filters.search}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    search: e.target.value,
+                  }))
+                }
+                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-primary focus:outline-none"
+              />
+              <MagnifyingGlass
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+            </div>
+
+            <SortDropdown
+              sort={filters.sortBy}
+              setSort={(val) =>
+                setFilters((prev) => ({ ...prev, sortBy: val }))
+              }
+            />
+          </div>
+
+          {/* Product Grid Content */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="h-48 w-full rounded-xl" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="py-20 text-center text-red-500">
+              Error loading products. Please try again.
+            </div>
+          ) : totalItems === 0 ? (
+            <div className="py-20 text-center text-gray-500">
+              <p className="text-xl">
+                No products found matching your filters.
+              </p>
+              <button
+                onClick={handleClearFilters}
+                className="mt-4 text-primary hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* The Grid (Using visibleProducts) */}
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {visibleProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+
+              {/* --- INFINITE SCROLL LOADER --- */}
+              {hasMore && (
+                <div
+                  ref={observerTarget}
+                  className="mt-8 flex justify-center py-4"
+                >
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <CircleNotch size={24} className="animate-spin" />
+                    Loading more products...
+                  </div>
+                </div>
+              )}
+
+              {/* End of Results Message */}
+              {!hasMore && visibleProducts.length > 0 && (
+                <p className="mt-8 text-center text-gray-400 text-sm">
+                  You've reached the end of the list.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Products;
