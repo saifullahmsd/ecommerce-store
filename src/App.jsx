@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ScrollToTop from "./components/shared/ScrollToTop";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
+import OfflineBanner from "./components/ui/OfflineBanner";
 import MainLayout from "./layout/MainLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -44,8 +46,12 @@ const PageLoader = () => (
   </div>
 );
 
-function App() {
-  const { mode } = useSelector((state) => state.theme); // <--- Get Theme
+// const BuggeyComponent = () => {
+//   throw new Error("I crashed");
+//   return <h1>this will never render</h1>;
+// };
+const App = () => {
+  const { mode } = useSelector((state) => state.theme);
 
   // Update HTML class when theme changes
   useEffect(() => {
@@ -56,11 +62,14 @@ function App() {
       root.classList.remove("dark");
     }
   }, [mode]);
-  return (
-    <>
-      <ScrollToTop />
-      <Toaster position="bottom-right" />
 
+  return (
+    <ErrorBoundary>
+      {/* <BuggeyComponent /> */}
+      <OfflineBanner />
+      <ScrollToTop />
+
+      <Toaster position="bottom-right" />
       {/* Wrap Routes in Suspense */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
@@ -105,8 +114,8 @@ function App() {
           </Route>
         </Routes>
       </Suspense>
-    </>
+    </ErrorBoundary>
   );
-}
+};
 
 export default App;

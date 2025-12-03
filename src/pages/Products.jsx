@@ -14,14 +14,14 @@ import ProductCard from "../components/shared/ProductCard";
 import FilterSidebar from "../components/products/FilterSidebar";
 import SortDropdown from "../components/products/SortDropdown";
 import Skeleton from "../components/shared/Skeleton";
-// Removed: Pagination import
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 const Products = () => {
   // 1. URL Params Management
   const [searchParams, setSearchParams] = useSearchParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // --- NEW: Infinite Scroll State ---
+  // Infinite Scroll State ---
   const [displayLimit, setDisplayLimit] = useState(12);
   const observerTarget = useRef(null);
 
@@ -33,7 +33,6 @@ const Products = () => {
     maxPrice: searchParams.get("maxPrice") || "",
     minRating: searchParams.get("minRating") || 0,
     sortBy: searchParams.get("sortBy") || "",
-    // Note: 'page' is removed from logic as we are scrolling now
   };
 
   const [filters, setFilters] = useState(initialFilters);
@@ -57,11 +56,10 @@ const Products = () => {
     if (filters.maxPrice) params.maxPrice = filters.maxPrice;
     if (filters.minRating > 0) params.minRating = filters.minRating;
     if (filters.sortBy) params.sortBy = filters.sortBy;
-    // Removed: page sync
     setSearchParams(params);
   }, [filters, debouncedSearch, setSearchParams]);
 
-  // --- NEW: Reset Scroll when filters change ---
+  //  Reset Scroll when filters change ---
   useEffect(() => {
     setDisplayLimit(12);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -79,7 +77,8 @@ const Products = () => {
     order: sortOrder,
   };
 
-  const { data, isLoading, isError } = useGetAllProductsQuery(queryParams);
+  const { data, isLoading, isError, refetch } =
+    useGetAllProductsQuery(queryParams);
 
   // 6. CLIENT-SIDE FILTERING
   const filteredProducts = useMemo(() => {
@@ -94,12 +93,12 @@ const Products = () => {
     });
   }, [data, filters.minPrice, filters.maxPrice, filters.minRating]);
 
-  // --- NEW: Slice based on displayLimit (Infinite Scroll) ---
+  //  Slice based on displayLimit (Infinite Scroll) ---
   const visibleProducts = filteredProducts.slice(0, displayLimit);
   const hasMore = displayLimit < filteredProducts.length;
   const totalItems = filteredProducts.length;
 
-  // --- NEW: Intersection Observer Logic ---
+  //  Intersection Observer Logic ---
   const handleObserver = useCallback(
     (entries) => {
       const [target] = entries;
@@ -212,9 +211,10 @@ const Products = () => {
               ))}
             </div>
           ) : isError ? (
-            <div className="py-20 text-center text-red-500">
-              Error loading products. Please try again.
-            </div>
+            <ErrorMessage
+              message="We couldn't load the products. Please try again."
+              onRetry={refetch}
+            />
           ) : totalItems === 0 ? (
             <div className="py-20 text-center text-gray-500">
               <p className="text-xl">
