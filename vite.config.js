@@ -1,11 +1,19 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite"; // <--- Yeh import hai?
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(), // <--- Yeh yahan add kiya hai?
-  ],
+  plugins: [react(), tailwindcss()],
+  build: {
+    // 2. Chunk Splitting Strategy
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
 });

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleWishlist } from "../../features/wishlist/wishlistSlice";
 import { Heart } from "phosphor-react";
 import { addToCart } from "../../features/cart/cartSlice";
+import LazyImage from "./LazyImage";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -22,7 +23,6 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.preventDefault(); // Prevent navigating to detail page
     dispatch(addToCart(product));
-    console.log("Added to cart:", product.title);
   };
 
   return (
@@ -39,10 +39,10 @@ const ProductCard = ({ product }) => {
 
       {/* Image Area */}
       <div className="relative flex h-48 items-center justify-center bg-gray-50 p-4">
-        <img
+        <LazyImage
           src={product.thumbnail}
           alt={product.title}
-          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full rounded-md"
         />
         <button
           onClick={handleWishlist}

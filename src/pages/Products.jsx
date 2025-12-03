@@ -69,7 +69,7 @@ const Products = () => {
   const [sortKey, sortOrder] = filters.sortBy.split("-");
 
   const queryParams = {
-    limit: 100, // Fetch large batch to allow client-side filtering
+    limit: 100,
     skip: 0,
     search: debouncedSearch,
     category: filters.category,
@@ -124,8 +124,18 @@ const Products = () => {
     };
   }, [handleObserver]);
 
+  const handleCategoryChange = useCallback((cat) => {
+    setFilters((prev) => ({ ...prev, category: cat, page: 1 }));
+    setIsSidebarOpen(false);
+  }, []);
+
+  const handlePriceChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value, page: 1 }));
+  }, []);
+
   // 7. Handlers
-  const handleClearFilters = () => {
+  const handleClearFilters = useCallback(() => {
     setFilters({
       search: "",
       category: "all",
@@ -134,8 +144,9 @@ const Products = () => {
       minRating: 0,
       sortBy: "",
     });
-    setDisplayLimit(12); // Reset scroll
-  };
+    setDisplayLimit(12);
+    setIsSidebarOpen(false);
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -162,7 +173,9 @@ const Products = () => {
           <FilterSidebar
             filters={filters}
             setFilters={setFilters}
-            clearFilters={handleClearFilters}
+            onCategoryChange={handleCategoryChange}
+            onPriceChange={handlePriceChange}
+            onClear={handleClearFilters}
             isOpen={isSidebarOpen}
             closeSidebar={() => setIsSidebarOpen(false)}
           />

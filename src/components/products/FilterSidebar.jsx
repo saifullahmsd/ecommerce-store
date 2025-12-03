@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetCategoriesQuery } from "../../api/dummyProductsApi";
 import { X, Funnel } from "phosphor-react";
 import Skeleton from "../shared/Skeleton";
@@ -6,21 +5,13 @@ import Skeleton from "../shared/Skeleton";
 const FilterSidebar = ({
   filters,
   setFilters,
-  clearFilters,
+  onCategoryChange,
+  onPriceChange,
+  onClear,
   isOpen,
   closeSidebar,
 }) => {
   const { data: categories, isLoading } = useGetCategoriesQuery();
-
-  const handleCategoryChange = (cat) => {
-    setFilters((prev) => ({ ...prev, category: cat, page: 1 })); // Reset page on filter change
-    if (window.innerWidth < 768) closeSidebar();
-  };
-
-  const handlePriceChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value, page: 1 }));
-  };
 
   return (
     <>
@@ -47,7 +38,7 @@ const FilterSidebar = ({
 
         {/* Clear Filters */}
         <button
-          onClick={clearFilters}
+          onClick={onClear}
           className="mb-6 w-full rounded-lg border border-red-500 py-2 text-sm font-semibold text-red-500 transition-colors hover:bg-red-50"
         >
           Reset All Filters
@@ -58,7 +49,7 @@ const FilterSidebar = ({
           <h3 className="mb-3 font-bold text-gray-800">Categories</h3>
           <div className="flex max-h-60 flex-col overflow-y-auto pr-2 custom-scrollbar">
             <button
-              onClick={() => handleCategoryChange("all")}
+              onClick={() => onCategoryChange("all")}
               className={`mb-2 text-left text-sm hover:text-primary ${
                 !filters.category || filters.category === "all"
                   ? "font-bold text-primary"
@@ -74,7 +65,7 @@ const FilterSidebar = ({
               categories?.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => handleCategoryChange(cat)}
+                  onClick={() => onCategoryChange(cat)}
                   className={`mb-2 text-left text-sm capitalize hover:text-primary ${
                     filters.category === cat
                       ? "font-bold text-primary"
@@ -97,7 +88,7 @@ const FilterSidebar = ({
               name="minPrice"
               placeholder="Min"
               value={filters.minPrice}
-              onChange={handlePriceChange}
+              onChange={onPriceChange}
               className="w-full rounded border p-2 text-sm focus:border-primary focus:outline-none"
             />
             <span className="text-gray-400">-</span>
@@ -106,7 +97,7 @@ const FilterSidebar = ({
               name="maxPrice"
               placeholder="Max"
               value={filters.maxPrice}
-              onChange={handlePriceChange}
+              onChange={onPriceChange}
               className="w-full rounded border p-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
