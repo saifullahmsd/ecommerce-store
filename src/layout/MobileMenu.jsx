@@ -1,4 +1,3 @@
-// src/layout/MobileMenu.jsx
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { X, MagnifyingGlass } from "phosphor-react";

@@ -1,4 +1,3 @@
-// src/layout/Footer.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -10,7 +9,6 @@ import {
 
 const Footer = () => {
   return (
-    // Use dark text color and light background (from v4 theme)
     <footer className="bg-text p-8 text-background md:p-12">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">

@@ -7,12 +7,11 @@ import Skeleton from "../../components/shared/Skeleton";
 
 const AdminProducts = () => {
   const navigate = useNavigate();
-  // Fetch 100 products
+
   const { data, isLoading } = useGetAllProductsQuery({ limit: 100 });
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      // API call would go here
       toast.success(`Product #${id} deleted (Mock)`);
     }
   };
@@ -36,8 +35,8 @@ const AdminProducts = () => {
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="w-full text-left">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <table className="w-full text-left min-w-[600px]">
           <thead className="bg-gray-50 text-xs font-bold uppercase text-gray-500">
             <tr>
               <th className="px-6 py-3">Product</th>

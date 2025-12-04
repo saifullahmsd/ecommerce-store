@@ -12,6 +12,7 @@ import {
   Sunglasses,
 } from "phosphor-react";
 import Skeleton from "../components/shared/Skeleton";
+import SEO from "../components/shared/SEO";
 
 // Helper to pick icons based on category name (Optional visual flair)
 const getCategoryIcon = (category) => {
@@ -65,6 +66,10 @@ const Categories = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SEO
+        title="All Categories"
+        description="Browse by Category find exactly what you are looking for."
+      />
       {/* Header */}
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-bold text-gray-900">Browse by Category</h1>

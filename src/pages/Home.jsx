@@ -6,10 +6,15 @@ import CategoriesSection from "../components/home/CategoriesSection";
 import FeaturedProducts from "../components/home/FeaturedProducts";
 import DealsBanner from "../components/home/DealsBanner";
 import BrandsStrip from "../components/home/BrandsStrip";
+import SEO from "../components/shared/SEO";
 
 const Home = () => {
   return (
     <div className="space-y-8">
+      <SEO
+        title="home"
+        description="Welcome to FlavourFusion - the best place to buy everything you need"
+      />
       {/* 1. Hero Section */}
       <Hero />
 

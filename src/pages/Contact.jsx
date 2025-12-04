@@ -1,6 +1,7 @@
 import React from "react";
 import { Envelope, Phone, MapPin, CaretDown } from "phosphor-react";
 import { toast } from "react-hot-toast";
+import SEO from "../components/shared/SEO";
 
 const Contact = () => {
   const handleSubmit = (e) => {
@@ -11,6 +12,10 @@ const Contact = () => {
 
   return (
     <div className="container mx-auto px-4 py-12">
+      <SEO
+        title="Contact Us"
+        description="Get in touch with our support team"
+      />
       {/* Header */}
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold text-gray-900">Get in Touch</h1>

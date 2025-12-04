@@ -1,4 +1,3 @@
-// src/layout/MainLayout.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -9,7 +8,7 @@ import PromoModal from "../components/ui/PromoModal";
 
 const MainLayout = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col  ">
       {/* Navbar */}
       <Navbar />
       <CartDrawer />

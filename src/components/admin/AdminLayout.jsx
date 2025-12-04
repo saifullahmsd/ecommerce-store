@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
@@ -8,10 +8,13 @@ import {
   Users,
   SignOut,
   ChartLineUp,
+  List,
+  X,
 } from "phosphor-react";
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const navClass = ({ isActive }) =>
     `flex items-center gap-3 rounded-lg px-4 py-3 transition-all ${
@@ -21,34 +24,52 @@ const AdminLayout = () => {
     }`;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* SIDEBAR (Fixed Left) */}
-      <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white shadow-xl">
-        <div className="flex h-16 items-center border-b border-gray-800 px-6">
+    <div className="flex min-h-screen bg-gray-100 font-sans text-gray-900">
+      {/* MOBILE OVERLAY (Backdrop) */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* SIDEBAR */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white shadow-xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
           <Link to="/" className="text-xl font-bold tracking-wide text-white">
             Flavor<span className="text-primary">Admin</span>
           </Link>
+          {/* Close Button (Mobile Only) */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden text-gray-400"
+          >
+            <X size={24} />
+          </button>
         </div>
 
         <nav className="space-y-2 p-4">
           <div className="mb-2 px-4 text-xs font-bold uppercase tracking-wider text-gray-500">
             Overview
           </div>
-
-          <NavLink to="/admin" end className={navClass}>
+          <NavLink
+            to="/admin"
+            end
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <SquaresFour size={20} /> Dashboard
           </NavLink>
-
-          <NavLink to="/admin/products" className={navClass}>
+          <NavLink
+            to="/admin/products"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <ShoppingBag size={20} /> Products
-          </NavLink>
-
-          <NavLink to="/admin/orders" className={navClass}>
-            <ChartLineUp size={20} /> Orders
-          </NavLink>
-
-          <NavLink to="/admin/users" className={navClass}>
-            <Users size={20} /> Customers
           </NavLink>
         </nav>
 
@@ -62,13 +83,23 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* MAIN CONTENT (Scrollable Right) */}
-      <div className="ml-64 flex-1">
+      {/* MAIN CONTENT */}
+      <div className="flex-1 min-w-0">
         {/* Top Header */}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between bg-white px-8 shadow-sm">
-          <h2 className="font-semibold text-gray-700">Admin Workspace</h2>
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between bg-white px-4 shadow-sm lg:px-8">
+          <div className="flex items-center gap-3">
+            {/* Hamburger Button (Mobile Only) */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="rounded p-2 text-gray-600 hover:bg-gray-100 lg:hidden"
+            >
+              <List size={24} />
+            </button>
+            <h2 className="font-semibold text-gray-700">Admin Workspace</h2>
+          </div>
+
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-600">
+            <span className="hidden text-sm font-medium text-gray-600 sm:block">
               Admin User
             </span>
             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
@@ -76,9 +107,8 @@ const AdminLayout = () => {
             </div>
           </div>
         </header>
-
         {/* Page Content */}
-        <div className="p-8">
+        <div className="p-4 lg:p-8 overflow-x-auto">
           <Outlet />
         </div>
       </div>

@@ -15,6 +15,7 @@ import FilterSidebar from "../components/products/FilterSidebar";
 import SortDropdown from "../components/products/SortDropdown";
 import Skeleton from "../components/shared/Skeleton";
 import ErrorMessage from "../components/ui/ErrorMessage";
+import SEO from "../components/shared/SEO";
 
 const Products = () => {
   // 1. URL Params Management
@@ -150,6 +151,10 @@ const Products = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SEO
+        title="All Products"
+        description="Browse our extensive collection of top rated products"
+      />
       {/* Page Header */}
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <h1 className="text-3xl font-bold text-gray-800">

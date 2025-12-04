@@ -21,9 +21,10 @@ import {
 // Components
 import ImageGallery from "../components/product-detail/ImageGallery";
 import Reviews from "../components/product-detail/Reviews";
-import ReviewForm from "../components/product-detail/ReviewForm"; // <--- New Import
+import ReviewForm from "../components/product-detail/ReviewForm";
 import ProductCard from "../components/shared/ProductCard";
 import Skeleton from "../components/shared/Skeleton";
+import SEO from "../components/shared/SEO";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -78,7 +79,6 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    // Note: Assuming you fixed the slice in Day 8 instructions, passing quantity directly
     dispatch(addToCart({ ...product, quantityToAdd: quantity }));
   };
 
@@ -117,6 +117,13 @@ const ProductDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SEO
+        title={product.title}
+        description={product.description}
+        image={product.thumbnail}
+        url={window.location.href}
+      />
+
       {/* Breadcrumbs */}
       <nav className="mb-6 flex text-sm text-gray-500">
         <Link to="/" className="hover:text-primary">
@@ -184,37 +191,41 @@ const ProductDetail = () => {
           </p>
 
           {/* Cart Buttons */}
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row border-b border-gray-100 pb-8">
-            <div className="flex items-center rounded-lg border border-gray-200">
+
+          <div className="fixed bottom-0 left-0 z-30 w-full border-t border-gray-200 bg-white p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:static md:mb-8 md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+            <div className="flex flex-col gap-4 sm:flex-row">
+              {/* Quantity Selector */}
+              <div className="flex items-center justify-between rounded-lg border border-gray-200 md:w-auto">
+                <button
+                  onClick={() => handleQuantityChange("dec")}
+                  className="px-4 py-3 hover:bg-gray-100"
+                >
+                  <Minus />
+                </button>
+                <span className="w-12 text-center font-bold">{quantity}</span>
+                <button
+                  onClick={() => handleQuantityChange("inc")}
+                  className="px-4 py-3 hover:bg-gray-100"
+                >
+                  <Plus />
+                </button>
+              </div>
+
+              {/* Add to Cart */}
               <button
-                onClick={() => handleQuantityChange("dec")}
-                className="px-4 py-3 hover:bg-gray-100"
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg transition-all active:scale-95 disabled:bg-gray-300"
               >
-                <Minus />
-              </button>
-              <span className="w-12 text-center font-bold">{quantity}</span>
-              <button
-                onClick={() => handleQuantityChange("inc")}
-                className="px-4 py-3 hover:bg-gray-100"
-              >
-                <Plus />
+                <ShoppingCart size={20} weight="bold" />
+                {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
               </button>
             </div>
-
-            <button
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700 disabled:bg-gray-300 disabled:shadow-none"
-            >
-              <ShoppingCart size={20} weight="bold" />
-              {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-            </button>
-            <button className="rounded-lg border border-gray-200 p-3 text-gray-400 hover:text-red-500">
-              <Heart size={24} weight="bold" />
-            </button>
           </div>
 
-          {/* Trust Badges... (Keep existing code) */}
+          <div className="h-24 md:h-0"></div>
+
+          {/* Trust Badges */}
           <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 sm:grid-cols-3">
             <div className="flex flex-col items-center gap-2 text-center">
               <Truck size={24} className="text-primary" />{" "}
