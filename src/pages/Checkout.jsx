@@ -8,6 +8,7 @@ import { CircleNotch, ShieldCheck } from "phosphor-react";
 // Components
 import AddressForm from "../components/checkout/AddressForm";
 import PaymentMethod from "../components/checkout/PaymentMethod";
+import PageTransition from "../components/shared/PageTransition";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -90,101 +91,103 @@ const Checkout = () => {
   const finalTotal = totalAmount + shipping + tax;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-3xl font-bold text-gray-900">Checkout</h1>
+    <PageTransition>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="mb-8 text-3xl font-bold text-gray-900">Checkout</h1>
 
-      <form
-        onSubmit={handlePlaceOrder}
-        className="grid grid-cols-1 gap-8 lg:grid-cols-3"
-      >
-        {/* LEFT COLUMN: FORMS */}
-        <div className="lg:col-span-2">
-          <AddressForm formData={formData} handleChange={handleInputChange} />
-          <PaymentMethod
-            selectedMethod={paymentMethod}
-            setSelectedMethod={setPaymentMethod}
-          />
-        </div>
+        <form
+          onSubmit={handlePlaceOrder}
+          className="grid grid-cols-1 gap-8 lg:grid-cols-3"
+        >
+          {/* LEFT COLUMN: FORMS */}
+          <div className="lg:col-span-2">
+            <AddressForm formData={formData} handleChange={handleInputChange} />
+            <PaymentMethod
+              selectedMethod={paymentMethod}
+              setSelectedMethod={setPaymentMethod}
+            />
+          </div>
 
-        {/* RIGHT COLUMN: SUMMARY */}
-        <div className="lg:col-span-1">
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-800">
-              Order Summary
-            </h3>
+          {/* RIGHT COLUMN: SUMMARY */}
+          <div className="lg:col-span-1">
+            <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+              <h3 className="mb-4 text-lg font-bold text-gray-800">
+                Order Summary
+              </h3>
 
-            {/* Items List (Small) */}
-            <div className="mb-4 max-h-60 overflow-y-auto space-y-3 custom-scrollbar">
-              {items.map((item) => (
-                <div key={item.id} className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded border bg-gray-50">
-                    <img
-                      src={item.image}
-                      alt=""
-                      className="h-full w-full object-contain"
-                    />
+              {/* Items List (Small) */}
+              <div className="mb-4 max-h-60 overflow-y-auto space-y-3 custom-scrollbar">
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded border bg-gray-50">
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <p className="line-clamp-1 text-sm font-medium text-gray-800">
+                        {item.title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+                    <span className="text-sm font-semibold">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </span>
                   </div>
-                  <div className="flex-1">
-                    <p className="line-clamp-1 text-sm font-medium text-gray-800">
-                      {item.title}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Qty: {item.quantity}
-                    </p>
-                  </div>
-                  <span className="text-sm font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                ))}
+              </div>
+
+              <div className="border-t border-gray-100 pt-4 space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span>${totalAmount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>Shipping</span>
+                  <span className={shipping === 0 ? "text-green-600" : ""}>
+                    {shipping === 0 ? "Free" : `$${shipping}`}
                   </span>
                 </div>
-              ))}
-            </div>
-
-            <div className="border-t border-gray-100 pt-4 space-y-2 text-sm">
-              <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span>${totalAmount.toFixed(2)}</span>
+                <div className="flex justify-between text-gray-600">
+                  <span>Tax (5%)</span>
+                  <span>${tax.toFixed(2)}</span>
+                </div>
               </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Shipping</span>
-                <span className={shipping === 0 ? "text-green-600" : ""}>
-                  {shipping === 0 ? "Free" : `$${shipping}`}
-                </span>
+
+              <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 text-xl font-bold text-gray-900">
+                <span>Total</span>
+                <span>${finalTotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Tax (5%)</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
+
+              <button
+                type="submit"
+                disabled={isProcessing}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+              >
+                {isProcessing ? (
+                  <>
+                    <CircleNotch className="animate-spin" size={24} />{" "}
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Place Order <ShieldCheck size={24} />
+                  </>
+                )}
+              </button>
+
+              <p className="mt-4 text-center text-xs text-gray-400">
+                Transaction is secured with 256-bit SSL encryption.
+              </p>
             </div>
-
-            <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 text-xl font-bold text-gray-900">
-              <span>Total</span>
-              <span>${finalTotal.toFixed(2)}</span>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isProcessing}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
-            >
-              {isProcessing ? (
-                <>
-                  <CircleNotch className="animate-spin" size={24} />{" "}
-                  Processing...
-                </>
-              ) : (
-                <>
-                  Place Order <ShieldCheck size={24} />
-                </>
-              )}
-            </button>
-
-            <p className="mt-4 text-center text-xs text-gray-400">
-              Transaction is secured with 256-bit SSL encryption.
-            </p>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </PageTransition>
   );
 };
 

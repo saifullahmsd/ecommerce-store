@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Heart, ShoppingBag } from "phosphor-react";
 import ProductCard from "../components/shared/ProductCard";
+import PageTransition from "../components/shared/PageTransition";
 
 const Wishlist = () => {
   const { items } = useSelector((state) => state.wishlist);
@@ -28,16 +29,18 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-3xl font-bold text-gray-800">
-        My Wishlist ({items.length})
-      </h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {items.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+    <PageTransition>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="mb-8 text-3xl font-bold text-gray-800">
+          My Wishlist ({items.length})
+        </h1>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {items.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

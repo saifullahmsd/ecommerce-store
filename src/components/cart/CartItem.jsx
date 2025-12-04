@@ -35,6 +35,7 @@ const CartItem = ({ item }) => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => dispatch(decreaseQuantity(item.id))}
+            aria-label="Decrease quantity"
             className="rounded-full bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200 active:bg-gray-300"
           >
             <Minus size={16} weight="bold" />
@@ -42,6 +43,7 @@ const CartItem = ({ item }) => {
           <span className="w-8 text-center font-medium">{item.quantity}</span>
           <button
             onClick={() => dispatch(increaseQuantity(item.id))}
+            aria-label="Increase quantity"
             className="rounded-full bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200 active:bg-gray-300"
           >
             <Plus size={16} weight="bold" />
@@ -55,6 +57,7 @@ const CartItem = ({ item }) => {
           </span>
           <button
             onClick={() => dispatch(removeFromCart(item.id))}
+            aria-label={`remove ${item.title} from cart`}
             className="rounded-full p-2 text-red-500 hover:bg-red-50"
           >
             <Trash size={20} />
