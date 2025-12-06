@@ -10,12 +10,10 @@ const AdminProductForm = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
 
-  // Fetch data if in Edit Mode
   const { data: product, isLoading } = useGetProductByIdQuery(id, {
     skip: !isEditMode,
   });
 
-  // Form State
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -51,50 +49,43 @@ const AdminProductForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (index, value) => {
-    const newImages = [...formData.images];
-    newImages[index] = value;
-    setFormData((prev) => ({ ...prev, images: newImages }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSaving(true);
-
-    // SIMULATE API CALL
     setTimeout(() => {
       setIsSaving(false);
-
-      if (isEditMode) {
-        toast.success("Product updated successfully (Mock)!");
-      } else {
-        toast.success("Product created successfully (Mock)!");
-      }
-
+      toast.success(
+        isEditMode ? "Product updated (Mock)!" : "Product created (Mock)!"
+      );
       navigate("/admin/products");
     }, 1500);
   };
 
-  if (isEditMode && isLoading) {
+  if (isEditMode && isLoading)
     return (
       <div className="p-8">
         <Skeleton className="h-96 w-full" />
       </div>
     );
-  }
+
+  const inputClass =
+    "w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none dark:bg-slate-900 dark:border-slate-700 dark:text-white dark:focus:border-primary";
+  const labelClass =
+    "mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300";
+  const cardClass =
+    "rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-4 dark:bg-slate-800 dark:border-slate-700";
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/admin/products")}
-            className="rounded-full bg-white p-2 text-gray-500 shadow-sm hover:text-primary"
+            className="rounded-full bg-white p-2 text-gray-500 shadow-sm hover:text-primary dark:bg-slate-800 dark:text-gray-300 dark:border dark:border-slate-700"
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
             {isEditMode ? "Edit Product" : "Add New Product"}
           </h1>
         </div>
@@ -104,159 +95,134 @@ const AdminProductForm = () => {
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-8 lg:grid-cols-3"
       >
-        {/* LEFT COLUMN: Main Info */}
         <div className="space-y-6 lg:col-span-2">
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-800">
+          <div className={cardClass}>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
               Basic Information
             </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Product Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="e.g. iPhone 15 Pro"
-                  required
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  rows="4"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="Product description..."
-                  required
-                />
-              </div>
+            <div>
+              <label className={labelClass}>Product Title</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g. iPhone 15 Pro"
+                className={inputClass}
+                required
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Description</label>
+              <textarea
+                name="description"
+                rows="4"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="product description.."
+                className={inputClass}
+                required
+              />
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-800">Images</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Main Thumbnail URL
-                </label>
-                <input
-                  type="url"
-                  name="thumbnail"
-                  value={formData.thumbnail}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="https://example.com/image.jpg"
-                  required
+          <div className={cardClass}>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+              Images
+            </h3>
+            <div>
+              <label className={labelClass}>Main Thumbnail URL</label>
+              <input
+                type="url"
+                name="thumbnail"
+                value={formData.thumbnail}
+                onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+                className={inputClass}
+                required
+              />
+            </div>
+            {formData.thumbnail && (
+              <div className="h-40 w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 p-2 dark:bg-slate-900 dark:border-slate-700">
+                <img
+                  src={formData.thumbnail}
+                  alt="Preview"
+                  className="h-full w-full object-contain"
                 />
               </div>
-              {/* Preview Main Image */}
-              {formData.thumbnail && (
-                <div className="h-40 w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 p-2">
-                  <img
-                    src={formData.thumbnail}
-                    alt="Preview"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Settings & Price */}
         <div className="space-y-6">
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-800">
+          <div className={cardClass}>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
               Pricing & Stock
             </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Price ($)
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="0.00"
-                  required
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Discount (%)
-                </label>
-                <input
-                  type="number"
-                  name="discountPercentage"
-                  value={formData.discountPercentage}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Stock Quantity
-                </label>
-                <input
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="0"
-                  required
-                />
-              </div>
+            <div>
+              <label className={labelClass}>Price ($)</label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="0.00"
+                className={inputClass}
+                required
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Discount (%)</label>
+              <input
+                type="number"
+                name="discountPercentage"
+                value={formData.discountPercentage}
+                onChange={handleChange}
+                placeholder="0"
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Stock Quantity</label>
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                placeholder="0"
+                className={inputClass}
+                required
+              />
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-800">
+          <div className={cardClass}>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
               Organization
             </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Category
-                </label>
-                <input
-                  type="text"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="e.g. smartphones"
-                  required
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  name="brand"
-                  value={formData.brand}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
-                  placeholder="e.g. Apple"
-                  required
-                />
-              </div>
+            <div>
+              <label className={labelClass}>Category</label>
+              <input
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="e.g. smartphones"
+                className={inputClass}
+                required
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Brand</label>
+              <input
+                type="text"
+                name="brand"
+                value={formData.brand}
+                onChange={handleChange}
+                placeholder="e.g. apple"
+                className={inputClass}
+                required
+              />
             </div>
           </div>
 

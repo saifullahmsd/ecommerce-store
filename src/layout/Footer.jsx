@@ -9,31 +9,41 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-text p-8 text-background md:p-12">
+    // FIX: Changed bg-slate-900 to bg-gray-100 (Light Mode)
+    // FIX: Changed text-white to text-gray-600 (Light Mode)
+    // Added dark: overrides for Dark Mode
+    <footer className="bg-gray-100 p-8 text-gray-600 md:p-12 dark:bg-slate-900 dark:text-gray-400 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {/* Column 1: Brand/About */}
+          {/* Brand */}
           <div>
-            <h3 className="mb-4 text-2xl font-bold">Ecommerce-Store</h3>
-            <p className="text-background/70">
+            <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+              OnlineShop
+            </h3>
+            <p className="text-sm leading-relaxed">
               Your one-stop shop for the finest products. Quality and customer
               satisfaction are our top priorities.
             </p>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Quick Links */}
           <div>
-            <h4 className="mb-4 text-lg font-semibold">Quick Links</h4>
+            <h4 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+              Quick Links
+            </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-background/70 hover:text-white">
+                <Link
+                  to="/"
+                  className="hover:text-primary dark:hover:text-white"
+                >
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   to="/products"
-                  className="text-background/70 hover:text-white"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Products
                 </Link>
@@ -41,7 +51,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/categories"
-                  className="text-background/70 hover:text-white"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Categories
                 </Link>
@@ -49,7 +59,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/cart"
-                  className="text-background/70 hover:text-white"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   My Cart
                 </Link>
@@ -57,38 +67,40 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3: Categories (Example) */}
+          {/* Categories */}
           <div>
-            <h4 className="mb-4 text-lg font-semibold">Categories</h4>
+            <h4 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+              Categories
+            </h4>
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/categories/electronics"
-                  className="text-background/70 hover:text-white"
+                  to="/products?category=smartphones"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Electronics
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/categories/apparel"
-                  className="text-background/70 hover:text-white"
+                  to="/products?category=mens-shirts"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Apparel
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/categories/groceries"
-                  className="text-background/70 hover:text-white"
+                  to="/products?category=groceries"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Groceries
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/categories/home"
-                  className="text-background/70 hover:text-white"
+                  to="/products?category=home-decoration"
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Home & Kitchen
                 </Link>
@@ -96,14 +108,16 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Customer Support */}
+          {/* Support */}
           <div>
-            <h4 className="mb-4 text-lg font-semibold">Customer Support</h4>
-            <ul className="space-y-2 text-background/70">
+            <h4 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+              Customer Support
+            </h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/contact"
-                  className="text-background/70 hover:text-white "
+                  className="hover:text-primary dark:hover:text-white"
                 >
                   Contact Us
                 </Link>
@@ -115,23 +129,20 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Socials */}
-        <div className="mt-12 border-t border-background/20 pt-8">
+        <div className="mt-12 border-t border-gray-200 pt-8 dark:border-slate-800">
           <div className="flex flex-col items-center justify-between sm:flex-row">
-            <p className="text-sm text-background/60">
-              © 2025 Ecommerce-Store. All rights reserved.
-            </p>
+            <p className="text-sm">© 2025 OnlineShop. All rights reserved.</p>
             <div className="mt-4 flex space-x-4 sm:mt-0">
-              <a href="#" className="text-background/70 hover:text-white">
+              <a href="#" className="hover:text-primary dark:hover:text-white">
                 <FacebookLogo size={24} />
               </a>
-              <a href="#" className="text-background/70 hover:text-white">
+              <a href="#" className="hover:text-primary dark:hover:text-white">
                 <TwitterLogo size={24} />
               </a>
-              <a href="#" className="text-background/70 hover:text-white">
+              <a href="#" className="hover:text-primary dark:hover:text-white">
                 <InstagramLogo size={24} />
               </a>
-              <a href="#" className="text-background/70 hover:text-white">
+              <a href="#" className="hover:text-primary dark:hover:text-white">
                 <LinkedinLogo size={24} />
               </a>
             </div>

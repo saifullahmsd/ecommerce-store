@@ -2,13 +2,14 @@ import React from "react";
 import { Helmet } from "react-helmet";
 
 const SEO = ({ title, description, keywords, image, url }) => {
-  const siteName = "FlavorFusion";
+  const siteName = "OnlineShop"; // Renamed
   const siteUrl = window.location.origin;
 
   const defaultDescription = "Shop the best products at unbeatable prices.";
 
+  // Use a reliable placeholder service (DummyJSON image links break often)
   const defaultImage =
-    "https://placehold.co/1200x630/2563EB/FFFFFF.png?text=FlavorFusion";
+    "https://placehold.co/1200x630/2563EB/FFFFFF.png?text=OnlineShop";
 
   const metaTitle = title ? `${title} | ${siteName}` : siteName;
   const metaDescription = description || defaultDescription;
@@ -22,10 +23,10 @@ const SEO = ({ title, description, keywords, image, url }) => {
       <meta name="description" content={metaDescription} />
       <meta
         name="keywords"
-        content={keywords || "ecommerce, shop, online store"}
+        content={keywords || "ecommerce, shop, online store, deals"}
       />
 
-      {/* Social Media (Open Graph) */}
+      {/* Open Graph (Facebook/WhatsApp) */}
       <meta property="og:type" content="website" />
       <meta property="og:title" content={metaTitle} />
       <meta property="og:description" content={metaDescription} />
@@ -33,7 +34,7 @@ const SEO = ({ title, description, keywords, image, url }) => {
       <meta property="og:url" content={metaUrl} />
       <meta property="og:site_name" content={siteName} />
 
-      {/* Twitter */}
+      {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />

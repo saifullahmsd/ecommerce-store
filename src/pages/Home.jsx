@@ -12,15 +12,16 @@ import PageTransition from "../components/shared/PageTransition";
 const Home = () => {
   return (
     <PageTransition>
-      <div className="space-y-8">
+      <div className="space-y-8 pb-12">
         <SEO
-          title="home"
-          description="Welcome to FlavourFusion - the best place to buy everything you need"
+          title="Home"
+          description="Welcome to OnlineShop - the best place to buy everything you need"
         />
+
         {/* 1. Hero Section */}
         <Hero />
 
-        {/* 2. Brand Strip (Moved up for trust signal, optional placement) */}
+        {/* 2. Brand Strip */}
         <BrandsStrip />
 
         {/* 3. Categories Grid */}
@@ -31,9 +32,6 @@ const Home = () => {
 
         {/* 5. Featured Products Grid */}
         <FeaturedProducts />
-
-        {/* Bottom Spacer */}
-        <div className="h-12"></div>
       </div>
     </PageTransition>
   );

@@ -1,15 +1,19 @@
 import React from "react";
 
 const AddressForm = ({ formData, handleChange }) => {
+  // Common classes variable bana diya taake code clean rahay aur bar bar repeat na ho
+  const inputClasses =
+    "w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:bg-white focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:bg-gray-700";
+
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-xl font-bold text-gray-800">
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <h2 className="mb-4 text-xl font-bold text-gray-800 dark:text-white">
         Shipping Information
       </h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Full Name */}
         <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             Full Name
           </label>
           <input
@@ -17,7 +21,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="John Doe"
             required
           />
@@ -25,7 +29,7 @@ const AddressForm = ({ formData, handleChange }) => {
 
         {/* Email */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             Email Address
           </label>
           <input
@@ -33,7 +37,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="john@example.com"
             required
           />
@@ -41,7 +45,7 @@ const AddressForm = ({ formData, handleChange }) => {
 
         {/* Phone */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             Phone Number
           </label>
           <input
@@ -49,7 +53,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="+1 234 567 890"
             required
           />
@@ -57,7 +61,7 @@ const AddressForm = ({ formData, handleChange }) => {
 
         {/* Address */}
         <div className="md:col-span-2">
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             Address
           </label>
           <input
@@ -65,7 +69,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="123 Main St, Apt 4B"
             required
           />
@@ -73,7 +77,7 @@ const AddressForm = ({ formData, handleChange }) => {
 
         {/* City */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             City
           </label>
           <input
@@ -81,7 +85,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="city"
             value={formData.city}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="New York"
             required
           />
@@ -89,7 +93,7 @@ const AddressForm = ({ formData, handleChange }) => {
 
         {/* Postal Code */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-600">
+          <label className="mb-1 block text-sm font-medium text-gray-600 dark:text-gray-300">
             Postal Code
           </label>
           <input
@@ -97,7 +101,7 @@ const AddressForm = ({ formData, handleChange }) => {
             name="postalCode"
             value={formData.postalCode}
             onChange={handleChange}
-            className="w-full rounded-lg border border-gray-300 p-2.5 focus:border-primary focus:outline-none"
+            className={inputClasses}
             placeholder="10001"
             required
           />

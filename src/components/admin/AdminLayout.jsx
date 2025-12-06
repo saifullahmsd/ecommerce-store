@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import ThemeToggle from "../ui/ThemeToggle";
 import {
   SquaresFour,
   ShoppingBag,
@@ -24,7 +25,7 @@ const AdminLayout = () => {
     }`;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 font-sans text-gray-900">
+    <div className="flex min-h-screen bg-gray-100 font-sans text-gray-900 dark:bg-black dark:text-gray-100 transition-colors duration-300">
       {/* MOBILE OVERLAY (Backdrop) */}
       {isSidebarOpen && (
         <div
@@ -35,13 +36,13 @@ const AdminLayout = () => {
 
       {/* SIDEBAR */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white shadow-xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white shadow-xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } dark:border-r dark:border-slate-800`}
       >
         <div className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
           <Link to="/" className="text-xl font-bold tracking-wide text-white">
-            Flavor<span className="text-primary">Admin</span>
+            Online<span className="text-primary">Admin</span>
           </Link>
           {/* Close Button (Mobile Only) */}
           <button
@@ -71,6 +72,20 @@ const AdminLayout = () => {
           >
             <ShoppingBag size={20} /> Products
           </NavLink>
+          <NavLink
+            to="/admin/orders"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
+            <ChartLineUp size={20} /> Orders
+          </NavLink>
+          <NavLink
+            to="/admin/users"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
+            <Users size={20} /> Customers
+          </NavLink>
         </nav>
 
         <div className="absolute bottom-0 w-full border-t border-gray-800 p-4">
@@ -86,7 +101,7 @@ const AdminLayout = () => {
       {/* MAIN CONTENT */}
       <div className="flex-1 min-w-0">
         {/* Top Header */}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between bg-white px-4 shadow-sm lg:px-8">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between bg-white px-4 shadow-sm lg:px-8 dark:bg-slate-900 dark:border-b dark:border-slate-800">
           <div className="flex items-center gap-3">
             {/* Hamburger Button (Mobile Only) */}
             <button
@@ -99,10 +114,11 @@ const AdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="hidden text-sm font-medium text-gray-600 sm:block">
-              Admin User
+            <ThemeToggle /> {/* Added Toggle here too */}
+            <span className="hidden text-sm font-medium text-gray-600 sm:block dark:text-gray-300">
+              Super Admin
             </span>
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold dark:bg-primary/20 dark:text-primary-light">
               A
             </div>
           </div>

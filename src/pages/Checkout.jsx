@@ -49,6 +49,11 @@ const Checkout = () => {
     e.preventDefault();
     setIsProcessing(true);
 
+    // Calculations for the order object
+    const shipping = totalAmount > 50 ? 0 : 10;
+    const tax = totalAmount * 0.05;
+    const finalTotal = totalAmount + shipping + tax;
+
     // 1. Create the Order Object
     const newOrder = {
       id: Math.floor(Math.random() * 100000), // Random ID
@@ -85,7 +90,7 @@ const Checkout = () => {
     }, 2000);
   };
 
-  // Calculations
+  // Calculations for UI
   const shipping = totalAmount > 50 ? 0 : 10;
   const tax = totalAmount * 0.05;
   const finalTotal = totalAmount + shipping + tax;
@@ -93,7 +98,9 @@ const Checkout = () => {
   return (
     <PageTransition>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="mb-8 text-3xl font-bold text-gray-900">Checkout</h1>
+        <h1 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
+          Checkout
+        </h1>
 
         <form
           onSubmit={handlePlaceOrder}
@@ -110,8 +117,8 @@ const Checkout = () => {
 
           {/* RIGHT COLUMN: SUMMARY */}
           <div className="lg:col-span-1">
-            <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h3 className="mb-4 text-lg font-bold text-gray-800">
+            <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+              <h3 className="mb-4 text-lg font-bold text-gray-800 dark:text-white">
                 Order Summary
               </h3>
 
@@ -119,46 +126,50 @@ const Checkout = () => {
               <div className="mb-4 max-h-60 overflow-y-auto space-y-3 custom-scrollbar">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded border bg-gray-50">
+                    <div className="h-12 w-12 rounded border bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
                       <img
                         src={item.image}
                         alt=""
-                        className="h-full w-full object-contain"
+                        className="h-full w-full object-contain p-1"
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="line-clamp-1 text-sm font-medium text-gray-800">
+                      <p className="line-clamp-1 text-sm font-medium text-gray-800 dark:text-gray-100">
                         {item.title}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Qty: {item.quantity}
                       </p>
                     </div>
-                    <span className="text-sm font-semibold">
+                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-200">
                       ${(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-gray-100 pt-4 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
+              <div className="border-t border-gray-100 pt-4 space-y-2 text-sm dark:border-gray-700">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300">
                   <span>Subtotal</span>
                   <span>${totalAmount.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300">
                   <span>Shipping</span>
-                  <span className={shipping === 0 ? "text-green-600" : ""}>
+                  <span
+                    className={
+                      shipping === 0 ? "text-green-600 dark:text-green-400" : ""
+                    }
+                  >
                     {shipping === 0 ? "Free" : `$${shipping}`}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300">
                   <span>Tax (5%)</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 text-xl font-bold text-gray-900">
+              <div className="mt-4 flex justify-between border-t border-gray-100 pt-4 text-xl font-bold text-gray-900 dark:border-gray-700 dark:text-white">
                 <span>Total</span>
                 <span>${finalTotal.toFixed(2)}</span>
               </div>
@@ -166,7 +177,7 @@ const Checkout = () => {
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-gray-600"
               >
                 {isProcessing ? (
                   <>
@@ -180,7 +191,7 @@ const Checkout = () => {
                 )}
               </button>
 
-              <p className="mt-4 text-center text-xs text-gray-400">
+              <p className="mt-4 text-center text-xs text-gray-400 dark:text-gray-500">
                 Transaction is secured with 256-bit SSL encryption.
               </p>
             </div>

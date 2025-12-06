@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 const ImageGallery = ({ images, thumbnail }) => {
-  // State to handle the currently selected main image
   const [mainImage, setMainImage] = useState(thumbnail);
 
-  // Update main image when the product changes (e.g. clicking related product)
   useEffect(() => {
     setMainImage(thumbnail);
   }, [thumbnail]);
 
-  // Ensure images array exists
   const galleryImages = images && images.length > 0 ? images : [thumbnail];
 
   return (
     <div className="flex flex-col gap-4">
       {/* Main Large Image */}
-      <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center p-4 relative group">
+      <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center p-4 relative group dark:bg-slate-800 dark:border-slate-700">
         <img
           src={mainImage}
           alt="Product Main"
@@ -29,10 +26,10 @@ const ImageGallery = ({ images, thumbnail }) => {
           <button
             key={index}
             onClick={() => setMainImage(img)}
-            className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 bg-gray-50 p-1 transition-all ${
+            className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 bg-gray-50 p-1 transition-all dark:bg-slate-800 ${
               mainImage === img
                 ? "border-primary ring-2 ring-primary/20"
-                : "border-transparent hover:border-gray-300"
+                : "border-transparent hover:border-gray-300 dark:hover:border-slate-600"
             }`}
           >
             <img

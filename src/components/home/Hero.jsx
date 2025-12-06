@@ -4,9 +4,9 @@ import { ArrowRight, ShoppingBag } from "phosphor-react";
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg dark:from-blue-900 dark:to-slate-900">
       <div className="container mx-auto flex flex-col items-center px-6 py-16 text-center md:flex-row md:text-left">
-        {/* text content  */}
+        {/* Text Content */}
         <div className="z-10 w-full md:w-1/2">
           <span className="mb-2 inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
             New Arrivals 2025
@@ -35,7 +35,8 @@ function Hero() {
             </Link>
           </div>
         </div>
-        {/* Decorative Background / Image area (CSS Only for lightweight) */}
+
+        {/* Decorative Background */}
         <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-white/10 blur-3xl md:h-[500px] md:w-[500px]"></div>
         <div className="absolute -bottom-20 left-0 h-64 w-64 rounded-full bg-yellow-400/20 blur-3xl"></div>
       </div>

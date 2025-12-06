@@ -36,7 +36,6 @@ const CartDrawer = () => {
     <AnimatePresence>
       {isCartOpen && (
         <>
-          {/* 1. Backdrop (Fade In/Out) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -45,12 +44,11 @@ const CartDrawer = () => {
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
           />
 
-          {/* 2. Slide-out Drawer (Slide In/Out) */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }} // <--- Physics!
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl dark:bg-slate-900"
           >
             <div className="flex h-full flex-col text-gray-900 dark:text-white">
@@ -67,7 +65,6 @@ const CartDrawer = () => {
                 </button>
               </div>
 
-              {/* Cart Items Area (Keep your existing map logic) */}
               <div className="flex-1 overflow-y-auto p-6">
                 {items.length === 0 ? (
                   <div className="flex h-full flex-col items-center justify-center space-y-4 text-gray-500">
@@ -84,11 +81,10 @@ const CartDrawer = () => {
                   <div className="space-y-6">
                     {items.map((item) => (
                       <motion.div
-                        layout // <--- Auto animates when items are removed/reordered
+                        layout //
                         key={item.id}
                         className="flex gap-4"
                       >
-                        {/* ... Keep existing Item UI ... */}
                         {/* Image */}
                         <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                           <img
@@ -146,7 +142,6 @@ const CartDrawer = () => {
               {/* Footer (Keep existing) */}
               {items.length > 0 && (
                 <div className="border-t border-gray-100 bg-gray-50 p-6 dark:bg-slate-800 dark:border-slate-700">
-                  {/* ... Subtotal & Buttons ... */}
                   <div className="mb-4 flex justify-between text-lg font-bold">
                     <span>Subtotal</span>
                     <span>${totalAmount.toFixed(2)}</span>
